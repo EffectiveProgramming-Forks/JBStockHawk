@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -47,10 +48,6 @@ public final class QuoteSyncJob {
     static void getQuotes(Context context) {
 
         Timber.d("Running sync job");
-
-        Calendar from = Calendar.getInstance();
-        Calendar to = Calendar.getInstance();
-        from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
 
         try {
 
@@ -92,20 +89,7 @@ public final class QuoteSyncJob {
                     putFloatValue(quoteCV, Contract.Quote.COLUMN_ABSOLUTE_CHANGE, quote.getChange());
                 }
 
-                // WARNING! Don't request historical data for a stock that doesn't exist!
-                // The request will hang forever X_x
-                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
-
-                StringBuilder historyBuilder = new StringBuilder();
-
-                for (HistoricalQuote it : history) {
-                    historyBuilder.append(it.getDate().getTimeInMillis());
-                    historyBuilder.append(", ");
-                    historyBuilder.append(it.getClose());
-                    historyBuilder.append("\n");
-                }
-
-                quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                putHistoricalQuotes(quoteCV, stock);
 
                 quoteCVs.add(quoteCV);
             }
@@ -127,6 +111,34 @@ public final class QuoteSyncJob {
         if (value != null) {
             float floatValue = value.floatValue();
             contentValues.put(column, floatValue);
+        }
+    }
+
+    private static void putHistoricalQuotes(ContentValues contentValues, Stock stock) {
+        // WARNING! Don't request historical data for a stock that doesn't exist!
+        // The request will hang forever X_x
+
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+
+        if (StockUtils.isValidStock(stock)) {
+            try {
+                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+
+                StringBuilder historyBuilder = new StringBuilder();
+
+                for (HistoricalQuote it : history) {
+                    historyBuilder.append(it.getDate().getTimeInMillis());
+                    historyBuilder.append(", ");
+                    historyBuilder.append(it.getClose());
+                    historyBuilder.append("\n");
+                }
+
+                contentValues.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -179,6 +191,5 @@ public final class QuoteSyncJob {
 
         }
     }
-
 
 }

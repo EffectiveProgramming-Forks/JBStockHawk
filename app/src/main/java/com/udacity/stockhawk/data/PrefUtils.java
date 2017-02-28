@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.udacity.stockhawk.R.id.symbol;
-
 public final class PrefUtils {
 
     private PrefUtils() {
@@ -90,11 +88,7 @@ public final class PrefUtils {
         editor.apply();
     }
 
-    public static boolean isValidStock(String name) {
-        return !name.isEmpty() && isAlpha(name);
-    }
-
-    private static boolean isAlpha(String name) {
+    public static boolean isAlpha(String name) {
         return name.matches("[a-zA-Z]+");
     }
 

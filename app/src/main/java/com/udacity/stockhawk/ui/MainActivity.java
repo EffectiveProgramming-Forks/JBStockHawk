@@ -22,11 +22,14 @@ import android.widget.Toast;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+
+import static com.udacity.stockhawk.R.id.error;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener,
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @SuppressWarnings("WeakerAccess")
-    @BindView(R.id.error) TextView error;
+    @BindView(error) TextView errorTextView;
     private StockAdapter adapter;
 
     @Override
@@ -93,20 +96,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onRefresh() {
 
         QuoteSyncJob.syncImmediately(this);
-
-        if (!networkUp() && adapter.getItemCount() == 0) {
+        boolean isNetwork = networkUp();
+        if (isNetwork && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
-            error.setText(getString(R.string.error_no_network));
-            error.setVisibility(View.VISIBLE);
-        } else if (!networkUp()) {
+            errorTextView.setText(getString(R.string.error_no_network));
+            errorTextView.setVisibility(View.VISIBLE);
+        } else if (isNetwork) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
             swipeRefreshLayout.setRefreshing(false);
-            error.setText(getString(R.string.error_no_stocks));
-            error.setVisibility(View.VISIBLE);
+            errorTextView.setText(getString(R.string.error_no_stocks));
+            errorTextView.setVisibility(View.VISIBLE);
         } else {
-            error.setVisibility(View.GONE);
+            errorTextView.setVisibility(View.GONE);
         }
     }
 
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     void addStock(String symbol) {
-        if (symbol != null && PrefUtils.isValidStock(symbol)) {
+        if (symbol != null && StockUtils.isValidSymbol(symbol)) {
 
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         swipeRefreshLayout.setRefreshing(false);
 
         if (data.getCount() != 0) {
-            error.setVisibility(View.GONE);
+            errorTextView.setVisibility(View.GONE);
         }
         adapter.setCursor(data);
     }
@@ -153,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         swipeRefreshLayout.setRefreshing(false);
         adapter.setCursor(null);
     }
-
-
+    
     private void setDisplayModeMenuItemIcon(MenuItem item) {
         if (PrefUtils.getDisplayMode(this)
                 .equals(getString(R.string.pref_display_mode_absolute_key))) {
