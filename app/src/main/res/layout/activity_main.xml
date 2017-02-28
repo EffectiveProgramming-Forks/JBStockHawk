@@ -16,8 +16,8 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin" />
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -35,7 +35,6 @@
         app:fabSize="normal"
         app:pressedTranslationZ="12dp"
         android:contentDescription="@string/add_button_description"
-        android:focusable="true"
         />
 
     <TextView
