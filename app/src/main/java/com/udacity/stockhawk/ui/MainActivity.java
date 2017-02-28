@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     void addStock(String symbol) {
-        if (symbol != null && !symbol.isEmpty()) {
+        if (symbol != null && PrefUtils.isValidStock(symbol)) {
 
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);

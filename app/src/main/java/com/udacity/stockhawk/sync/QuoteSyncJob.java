@@ -13,6 +13,7 @@ import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -38,6 +39,9 @@ public final class QuoteSyncJob {
     private static final int YEARS_OF_HISTORY = 2;
 
     private QuoteSyncJob() {
+    }
+
+    static void getQuote(Context context) {
     }
 
     static void getQuotes(Context context) {
@@ -71,13 +75,22 @@ public final class QuoteSyncJob {
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
 
-
                 Stock stock = quotes.get(symbol);
-                StockQuote quote = stock.getQuote();
+                Timber.d("stock is null " + stock);
+                if (stock == null || stock.getName() == null || stock.getName().isEmpty()) {
+                    Timber.d("stock is null" + stock);
+                    continue;
+                }
 
-                float price = quote.getPrice().floatValue();
-                float change = quote.getChange().floatValue();
-                float percentChange = quote.getChangeInPercent().floatValue();
+                ContentValues quoteCV = new ContentValues();
+                quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+
+                StockQuote quote = stock.getQuote();
+                if (quote != null) {
+                    putFloatValue(quoteCV, Contract.Quote.COLUMN_PRICE, quote.getPrice());
+                    putFloatValue(quoteCV, Contract.Quote.COLUMN_PERCENTAGE_CHANGE, quote.getChangeInPercent());
+                    putFloatValue(quoteCV, Contract.Quote.COLUMN_ABSOLUTE_CHANGE, quote.getChange());
+                }
 
                 // WARNING! Don't request historical data for a stock that doesn't exist!
                 // The request will hang forever X_x
@@ -92,17 +105,9 @@ public final class QuoteSyncJob {
                     historyBuilder.append("\n");
                 }
 
-                ContentValues quoteCV = new ContentValues();
-                quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
-
                 quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
 
                 quoteCVs.add(quoteCV);
-
             }
 
             context.getContentResolver()
@@ -115,6 +120,13 @@ public final class QuoteSyncJob {
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
+        }
+    }
+
+    private static void putFloatValue(ContentValues contentValues, String column, BigDecimal value) {
+        if (value != null) {
+            float floatValue = value.floatValue();
+            contentValues.put(column, floatValue);
         }
     }
 
