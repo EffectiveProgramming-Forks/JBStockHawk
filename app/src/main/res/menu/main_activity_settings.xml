@@ -6,6 +6,7 @@
         android:id="@+id/action_change_units"
         android:icon="@drawable/ic_dollar"
         android:orderInCategory="99"
+        android:title="@string/options_menu_absolute_button_description"
         app:showAsAction="always" />
 
 </menu>
