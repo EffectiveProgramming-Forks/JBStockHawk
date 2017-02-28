@@ -20,9 +20,9 @@
 
     <string name="action_change_units">@string/pref_display_mode_key</string>
 
-    <string name="add_button_description">Add</string>
-    <string name="options_menu_absolute_button_description">absolute change button</string>
-    <string name="options_menu_percentage_button_description">percent change button</string>
+    <string name="a11y_add_button">Add</string>
+    <string name="a11y_options_menu_absolute_button">absolute change button</string>
+    <string name="a11y_options_menu_percentage_button">percent change button</string>
 
     <string name="dialog_title">Add Stock</string>
     <string name="dialog_hint">Symbol (e.g. GOOG)</string>

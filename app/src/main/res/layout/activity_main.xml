@@ -34,7 +34,7 @@
         app:elevation="6dp"
         app:fabSize="normal"
         app:pressedTranslationZ="12dp"
-        android:contentDescription="@string/add_button_description"
+        android:contentDescription="@string/a11y_add_button"
         />
 
     <TextView
