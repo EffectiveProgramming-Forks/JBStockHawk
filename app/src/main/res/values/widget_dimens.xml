@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Stock Price Widget -->
+    <dimen name="widget_stock_price_default_width">180dp</dimen>
+    <dimen name="widget_stock_price_default_resize_width">180dp</dimen>
+    <dimen name="widget_stock_price_default_height">180dp</dimen>
+    <dimen name="widget_stock_price_default_resize_height">@dimen/widget_stock_price_default_height</dimen>
+    <dimen name="widget_margin">8dp</dimen>
+</resources>

@@ -34,9 +34,13 @@
     <!-- Add stock error messages  -->
     <string name="error_no_network">No network connectivity! Will load stock cursor when the network is available.</string>
     <string name="error_no_stocks">No stocks added! Hit the floating action button to add one.</string>
+    <string name="empty_stock_quote_list_widget">No Stock Quotes Available</string>
 
     <!-- Refresh content error messages  -->
     <string name="toast_stock_added_no_connectivity">Symbol <xliff:g id="stock symbol">%s</xliff:g> added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
+
+    <!-- Strings related to Widgets -->
+    <string name="title_widget_stocks">@string/app_name</string>
 
 </resources>
