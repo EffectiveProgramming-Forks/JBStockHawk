@@ -7,7 +7,6 @@ package com.udacity.stockhawk.widget;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Build;
 import android.widget.AdapterView;
@@ -24,7 +23,6 @@ import timber.log.Timber;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class StockPriceRemoteViewsService extends RemoteViewsService {
-    public final String LOG_TAG = StockPriceRemoteViewsService.class.getSimpleName();
     private static final String[] FORECAST_COLUMNS = {
             Contract.Quote.TABLE_NAME + "." + Contract.Quote._ID,
             Contract.Quote.COLUMN_SYMBOL,
@@ -32,7 +30,6 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
             Contract.Quote.COLUMN_PERCENTAGE_CHANGE
     };
     // these indices must match the projection
-    static final int INDEX_QUOTE_ID = 0;
     static final int INDEX_QUOTE_SYMBOL = 1;
     static final int INDEX_QUOTE_PRICE = 2;
     static final int INDEX_QUOTE_PERCENTAGE_CHANGE = 3;
@@ -44,7 +41,6 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
 
             @Override
             public void onCreate() {
-                // Nothing to do
                 Timber.d("onCreate");
             }
 
@@ -83,7 +79,8 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
             @Override
             public RemoteViews getViewAt(int position) {
                 if (position == AdapterView.INVALID_POSITION ||
-                        data == null || !data.moveToPosition(position)) {
+                        data == null ||
+                        !data.moveToPosition(position)) {
                     return null;
                 }
                 RemoteViews views = new RemoteViews(getPackageName(),
@@ -120,13 +117,13 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
             public int getViewTypeCount() {
 
                 return 1;
-
             }
 
             @Override
             public long getItemId(int position) {
-                if (data.moveToPosition(position))
-                    return data.getLong(INDEX_QUOTE_ID);
+                if (data.moveToPosition(position)) {
+                    return data.getLong(Contract.Quote.POSITION_ID);
+                }
                 return position;
             }
 

@@ -7,7 +7,7 @@
     android:minResizeHeight="@dimen/widget_stock_price_default_resize_height"
     android:minWidth="@dimen/widget_stock_price_default_width"
     android:minResizeWidth="@dimen/widget_stock_price_default_resize_width"
-    android:previewImage="@drawable/widget_preview_today"
+    android:previewImage="@drawable/ic_dollar"
     android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="0"
     tools:ignore="UnusedAttribute"

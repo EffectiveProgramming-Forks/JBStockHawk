@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.widget.RemoteViews;
 
 import com.udacity.stockhawk.R;
@@ -30,6 +28,7 @@ import com.udacity.stockhawk.ui.MainActivity;
 public class StockPriceWidgetProvider extends AppWidgetProvider {
 
     public static final String CLICK_ACTION = "com.breunig.jeff.stock.hawk";
+    private static final String POSITION_EXTRA = "position_extra";
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -45,16 +44,16 @@ public class StockPriceWidgetProvider extends AppWidgetProvider {
 
             setRemoteAdapter(context, views);
 
-            Intent clickIntent = new Intent(context, StockPriceWidgetProvider.class);
-            clickIntent.setAction(StockPriceWidgetProvider.CLICK_ACTION);
-            clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            Intent clickActionIntent = new Intent(context, StockPriceWidgetProvider.class);
+            clickActionIntent.setAction(StockPriceWidgetProvider.CLICK_ACTION);
+            clickActionIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, clickIntent,
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, clickActionIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.widget_list, pendingIntent);
 
             views.setEmptyView(R.id.widget_list, R.id.widget_empty);
-            views.setContentDescription(R.id.widget_list, "Stock quotes");
+            views.setContentDescription(R.id.widget_list, context.getString(R.string.app_name));
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
@@ -64,7 +63,6 @@ public class StockPriceWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
-        super.onReceive(context, intent);
 
         if (QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction())) {
 
@@ -73,14 +71,11 @@ public class StockPriceWidgetProvider extends AppWidgetProvider {
                     new ComponentName(context, getClass()));
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
 
-        } else if (intent.getAction().equals(CLICK_ACTION)) {
-            int position = intent.getIntExtra("pos", 0);
-            @ColorInt int color = intent.getIntExtra("color", ContextCompat.getColor(context, R.color.material_green_700));
+        } else if (StockPriceWidgetProvider.CLICK_ACTION.equals(intent.getAction())) {
+            int position = intent.getIntExtra(POSITION_EXTRA, 0);
 
             Intent i = new Intent(context, DetailActivity.class);
-            i.putExtra("pos",position);
-            i.putExtra("color", color);
-            i.putExtra("transition", false);
+            i.putExtra(POSITION_EXTRA, position);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }
