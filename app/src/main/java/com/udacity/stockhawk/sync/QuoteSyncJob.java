@@ -123,22 +123,25 @@ public final class QuoteSyncJob {
 
         if (StockUtils.isValidStock(stock)) {
             try {
-                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
-
-                StringBuilder historyBuilder = new StringBuilder();
-
-                for (HistoricalQuote it : history) {
-                    historyBuilder.append(it.getDate().getTimeInMillis());
-                    historyBuilder.append(", ");
-                    historyBuilder.append(it.getClose());
-                    historyBuilder.append("\n");
-                }
-
-                contentValues.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                List<HistoricalQuote> historyQuotes = stock.getHistory(from, to, Interval.WEEKLY);
+                String historyString = getHistoryString(historyQuotes);
+                contentValues.put(Contract.Quote.COLUMN_HISTORY, historyString);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static String getHistoryString(List<HistoricalQuote> historyQuotes) {
+        StringBuilder historyBuilder = new StringBuilder();
+
+        for (HistoricalQuote it : historyQuotes) {
+            historyBuilder.append(it.getDate().getTimeInMillis());
+            historyBuilder.append(", ");
+            historyBuilder.append(it.getClose());
+            historyBuilder.append("\n");
+        }
+        return historyBuilder.toString();
     }
 
     private static void schedulePeriodic(Context context) {
