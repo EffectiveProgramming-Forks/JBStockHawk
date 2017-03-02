@@ -26,6 +26,7 @@ public final class Contract {
         public static final String COLUMN_MONTH_HISTORY = "month_history";
         public static final String COLUMN_WEEK_HISTORY = "week_history";
         public static final String COLUMN_DAY_HISTORY = "day_history";
+        public static final String COLUMN_EXCHANGE = "exchange";
 
         public static final int POSITION_ID = 0;
         public static final int POSITION_SYMBOL = 1;
@@ -36,6 +37,7 @@ public final class Contract {
         public static final int POSITION_MONTH_HISTORY = 6;
         public static final int POSITION_WEEK_HISTORY = 7;
         public static final int POSITION_DAY_HISTORY = 8;
+        public static final int POSITION_EXCHANGE = 9;
 
         public static final String[] QUOTE_COLUMNS = {
                 _ID,
@@ -46,7 +48,8 @@ public final class Contract {
                 COLUMN_YEAR_HISTORY,
                 COLUMN_MONTH_HISTORY,
                 COLUMN_WEEK_HISTORY,
-                COLUMN_DAY_HISTORY
+                COLUMN_DAY_HISTORY,
+                COLUMN_EXCHANGE
         };
         public static final String TABLE_NAME = "quotes";
 

@@ -81,6 +81,7 @@ public final class QuoteSyncJob {
 
                 ContentValues quoteCV = new ContentValues();
                 quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+                quoteCV.put(Contract.Quote.COLUMN_EXCHANGE, stock.getStockExchange());
 
                 StockQuote quote = stock.getQuote();
                 if (quote != null) {

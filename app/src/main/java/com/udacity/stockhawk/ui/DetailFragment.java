@@ -185,14 +185,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         yAxis.setValueFormatter(new YAxisPriceValueFormatter());
         setupAxisBase(yAxis);
 
-        StockChartMarkerView StockChartMarkerView = new StockChartMarkerView(getContext(),
-                R.layout.stock_chart_marker_view, getSecondToLastData(dataPairs), referenceTime);
-
-
         Legend legend = linechart.getLegend();
         legend.setEnabled(false);
-
-        linechart.setMarker(StockChartMarkerView);
 
         //disable all interactions with the graph
         linechart.setDragEnabled(false);

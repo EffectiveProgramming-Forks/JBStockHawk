@@ -19,14 +19,13 @@ import android.widget.TextView;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
+import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockUtils;
 import com.udacity.stockhawk.utils.CustomBundler;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -34,7 +33,7 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-import static com.udacity.stockhawk.R.id.change;
+import static com.udacity.stockhawk.R.id.price;
 
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -49,7 +48,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @BindView(R.id.tabs) public TabLayout tabLayout;
     @BindView(R.id.symbol) public TextView symbolTextView;
     @BindView(R.id.exchange) public TextView stockExchangeTextView;
-    @BindView(R.id.price) public TextView priceTextView;
+    @BindView(price) public TextView priceTextView;
     @BindView(R.id.change) public TextView changeTextView;
     //@formatter:on
 
@@ -114,32 +113,28 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            String stockExchange = "";//data.getString(Contract.Quote.POSITION_EXCHANGE);
-            String stockName = data.getString(Contract.Quote.POSITION_SYMBOL);
-            Float stockPrice = data.getFloat(Contract.Quote.POSITION_PRICE);
-            Float absoluteChange = data.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
+            String stockExchange = data.getString(Contract.Quote.POSITION_EXCHANGE);
+            stockExchangeTextView.setText(stockExchange);
+            String symbol = data.getString(Contract.Quote.POSITION_SYMBOL);
+            symbolTextView.setText(symbol);
 
             getWindow().getDecorView().setContentDescription(
-                    String.format(getString(R.string.detail_activity_cd), stockName));
+                    String.format(getString(R.string.detail_activity_cd), symbol));
 
-            DecimalFormat dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
-            dollarFormat.setMaximumFractionDigits(2);
-            dollarFormat.setMinimumFractionDigits(2);
+            String price = StockUtils.getFormattedPriceValue(data.getFloat(Contract.Quote.POSITION_PRICE));
+            priceTextView.setText(price);
 
-            stockExchangeTextView.setText(stockExchange);
-            symbolTextView.setText(stockName);
-            priceTextView.setText(dollarFormat.format(stockPrice));
-            priceTextView.setContentDescription(String.format(getString(R.string.stock_price_cd), priceTextView.getText()));
-            changeTextView.setText(dollarFormat.format(absoluteChange));
-            if (change > 0) {
-                changeTextView.setBackgroundResource(R.drawable.percent_change_pill_green);
-                changeTextView.setContentDescription(
-                        String.format(getString(R.string.stock_increment_cd), changeTextView.getText()));
+            float rawAbsoluteChange = data.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
+            changeTextView.setBackgroundResource(StockUtils.getChangeBackgroundResource(rawAbsoluteChange));
+
+            String changeValue;
+            if (PrefUtils.getDisplayMode(getBaseContext())
+                    .equals(getBaseContext().getString(R.string.pref_display_mode_absolute_key))) {
+                changeValue = StockUtils.getFormattedAbsoluteChangeValue(rawAbsoluteChange);
             } else {
-                changeTextView.setBackgroundResource(R.drawable.percent_change_pill_red);
-                changeTextView.setContentDescription(
-                        String.format(getString(R.string.stock_decrement_cd), changeTextView.getText()));
+                changeValue = StockUtils.getFormattedPercentageChangeValue(data.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
             }
+            changeTextView.setText(changeValue);
         }
     }
 
