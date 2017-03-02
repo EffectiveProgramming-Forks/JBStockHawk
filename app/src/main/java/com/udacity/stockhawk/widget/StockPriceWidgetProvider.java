@@ -28,7 +28,7 @@ import com.udacity.stockhawk.ui.MainActivity;
 public class StockPriceWidgetProvider extends AppWidgetProvider {
 
     public static final String CLICK_ACTION = "com.breunig.jeff.stock.hawk";
-    private static final String POSITION_EXTRA = "position_extra";
+    public static final String POSITION_EXTRA = "position_extra";
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // Perform this loop procedure for each App Widget that belongs to this provider

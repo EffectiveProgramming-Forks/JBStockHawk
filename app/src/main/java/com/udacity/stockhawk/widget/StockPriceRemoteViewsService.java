@@ -23,16 +23,6 @@ import timber.log.Timber;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class StockPriceRemoteViewsService extends RemoteViewsService {
-    private static final String[] FORECAST_COLUMNS = {
-            Contract.Quote.TABLE_NAME + "." + Contract.Quote._ID,
-            Contract.Quote.COLUMN_SYMBOL,
-            Contract.Quote.COLUMN_PRICE,
-            Contract.Quote.COLUMN_PERCENTAGE_CHANGE
-    };
-    // these indices must match the projection
-    static final int INDEX_QUOTE_SYMBOL = 1;
-    static final int INDEX_QUOTE_PRICE = 2;
-    static final int INDEX_QUOTE_PERCENTAGE_CHANGE = 3;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -84,22 +74,24 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
                     return null;
                 }
                 RemoteViews views = new RemoteViews(getPackageName(),
-                        R.layout.list_item_quote);
+                        R.layout.widget_list_item_quote);
 
                 String description = "test";
-                String symbol = data.getString(INDEX_QUOTE_SYMBOL);
-                String price = data.getString(INDEX_QUOTE_PRICE);
-                String perchantageChange = data.getString(INDEX_QUOTE_PERCENTAGE_CHANGE);
+                String symbol = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_SYMBOL));
+                String price = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PRICE));
+                String percentageChange = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PERCENTAGE_CHANGE));
+                String absoluteChange = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_ABSOLUTE_CHANGE));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                     setRemoteContentDescription(views, description);
                 }
                 views.setTextViewText(R.id.symbol, symbol);
                 views.setTextViewText(R.id.price, price);
-                views.setTextViewText(R.id.change, perchantageChange);
+                views.setTextViewText(R.id.change, percentageChange);
 
                 final Intent fillInIntent = new Intent();
-                views.setOnClickFillInIntent(R.id.widget_list_item_quote, fillInIntent);
+                fillInIntent.putExtra(StockPriceWidgetProvider.POSITION_EXTRA, position);
+                views.setOnClickFillInIntent(R.id.widget_stock_quote, fillInIntent);
                 return views;
             }
 
@@ -110,7 +102,7 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
 
             @Override
             public RemoteViews getLoadingView() {
-                return new RemoteViews(getPackageName(), R.layout.widget_list_item_quote);
+                return null;
             }
 
             @Override
