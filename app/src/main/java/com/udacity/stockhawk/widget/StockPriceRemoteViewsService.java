@@ -15,6 +15,8 @@ import android.widget.RemoteViewsService;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
+import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockUtils;
 
 import timber.log.Timber;
 
@@ -76,18 +78,24 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
                 RemoteViews views = new RemoteViews(getPackageName(),
                         R.layout.widget_list_item_quote);
 
-                String description = "test";
                 String symbol = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_SYMBOL));
-                String price = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PRICE));
-                String percentageChange = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PERCENTAGE_CHANGE));
-                String absoluteChange = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_ABSOLUTE_CHANGE));
+                String price = StockUtils.getFormattedPriceValue(data.getFloat(data.getColumnIndex(Contract.Quote.COLUMN_PRICE)));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                    setRemoteContentDescription(views, description);
+                float rawAbsoluteChange = data.getFloat(data.getColumnIndex(Contract.Quote.COLUMN_ABSOLUTE_CHANGE));
+
+                String changeValue;
+                if (PrefUtils.getDisplayMode(getBaseContext())
+                        .equals(getBaseContext().getString(R.string.pref_display_mode_absolute_key))) {
+                    changeValue = StockUtils.getFormattedAbsoluteChangeValue(rawAbsoluteChange);
+                } else {
+                    changeValue = StockUtils.getFormattedPercentageChangeValue(data.getFloat(data.getColumnIndex(Contract.Quote.COLUMN_PERCENTAGE_CHANGE)));
                 }
+
                 views.setTextViewText(R.id.symbol, symbol);
                 views.setTextViewText(R.id.price, price);
-                views.setTextViewText(R.id.change, percentageChange);
+                views.setTextViewText(R.id.change, changeValue);
+                views.setInt(R.id.change, "setBackgroundResource",
+                        StockUtils.getChangeBackgroundResource(rawAbsoluteChange));
 
                 final Intent fillInIntent = new Intent();
                 fillInIntent.putExtra(StockPriceWidgetProvider.POSITION_EXTRA, position);
