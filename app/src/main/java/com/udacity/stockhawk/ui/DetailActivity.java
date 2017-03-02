@@ -13,7 +13,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -43,7 +42,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private Uri stockUri;
     @State(CustomBundler.class) public Map<Integer, String> fragmentTags = new HashMap<>();
     @State public boolean isDataLoaded = false;
-    @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.viewpager) public ViewPager viewPager;
     @BindView(R.id.tabs) public TabLayout tabLayout;
     @BindView(R.id.symbol) public TextView symbolTextView;
@@ -59,7 +57,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         Icepick.restoreInstanceState(this, savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        //setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
