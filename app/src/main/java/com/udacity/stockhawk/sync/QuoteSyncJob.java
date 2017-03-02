@@ -116,16 +116,22 @@ public final class QuoteSyncJob {
     private static void putHistoricalQuotes(ContentValues contentValues, Stock stock) {
         // WARNING! Don't request historical data for a stock that doesn't exist!
         // The request will hang forever X_x
+        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.MONTH, -11, Interval.MONTHLY, Contract.Quote.COLUMN_YEAR_HISTORY);
+        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.MONTH, -5, Interval.MONTHLY, Contract.Quote.COLUMN_MONTH_HISTORY);
+        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.DAY_OF_YEAR, -63, Interval.WEEKLY,Contract.Quote.COLUMN_WEEK_HISTORY);
+        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.DAY_OF_YEAR, -4, Interval.DAILY,Contract.Quote.COLUMN_DAY_HISTORY);
+    }
 
+    private static void putHistorialQuotesForUnitOfTime(ContentValues contentValues, Stock stock, int unit, int time, Interval interval, String column) {
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
-        from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+        from.add(unit, time);
 
         if (StockUtils.isValidStock(stock)) {
             try {
-                List<HistoricalQuote> historyQuotes = stock.getHistory(from, to, Interval.WEEKLY);
+                List<HistoricalQuote> historyQuotes = stock.getHistory(from, to, interval);
                 String historyString = getHistoryString(historyQuotes);
-                contentValues.put(Contract.Quote.COLUMN_HISTORY, historyString);
+                contentValues.put(column, historyString);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -137,17 +143,15 @@ public final class QuoteSyncJob {
 
         for (HistoricalQuote it : historyQuotes) {
             historyBuilder.append(it.getDate().getTimeInMillis());
-            historyBuilder.append(", ");
+            historyBuilder.append(":");
             historyBuilder.append(it.getClose());
-            historyBuilder.append("\n");
+            historyBuilder.append("$");
         }
         return historyBuilder.toString();
     }
 
     private static void schedulePeriodic(Context context) {
         Timber.d("Scheduling a periodic task");
-
-
         JobInfo.Builder builder = new JobInfo.Builder(PERIODIC_ID, new ComponentName(context, QuoteJobService.class));
 
 

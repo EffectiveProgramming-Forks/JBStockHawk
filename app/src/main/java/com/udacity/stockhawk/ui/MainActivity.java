@@ -1,13 +1,18 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,9 +50,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private StockAdapter adapter;
 
     @Override
-    public void onClick(String symbol) {
-
+    public void onClick(String symbol, StockAdapter.StockViewHolder viewHolder) {
         Timber.d("Symbol clicked: %s", symbol);
+        Uri stockUri = Contract.Quote.makeUriForStock(symbol);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.setData(stockUri);
+        Pair<View, String> priceViewPair = Pair.create((View) viewHolder.priceTextView, getString(R.string.stock_price_transition));
+        Pair<View, String> changeViewPair = Pair.create((View) viewHolder.changeTextView, getString(R.string.stock_change_transition));
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, priceViewPair, changeViewPair);
+
+        ActivityCompat.startActivity(this, intent, optionsCompat.toBundle());
     }
 
     @Override

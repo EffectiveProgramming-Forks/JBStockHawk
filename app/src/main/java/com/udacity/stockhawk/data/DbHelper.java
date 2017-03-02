@@ -11,10 +11,11 @@ class DbHelper extends SQLiteOpenHelper {
 
 
     private static final String NAME = "StockHawk.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
 
 
     DbHelper(Context context) {
+
         super(context, NAME, null, VERSION);
     }
 
@@ -26,7 +27,10 @@ class DbHelper extends SQLiteOpenHelper {
                 + Quote.COLUMN_PRICE + " REAL NOT NULL, "
                 + Quote.COLUMN_ABSOLUTE_CHANGE + " REAL NOT NULL, "
                 + Quote.COLUMN_PERCENTAGE_CHANGE + " REAL NOT NULL, "
-                + Quote.COLUMN_HISTORY + " TEXT NOT NULL, "
+                + Quote.COLUMN_YEAR_HISTORY + " TEXT NOT NULL, "
+                + Quote.COLUMN_MONTH_HISTORY + " TEXT NOT NULL, "
+                + Quote.COLUMN_DAY_HISTORY + " TEXT NOT NULL, "
+                + Quote.COLUMN_WEEK_HISTORY + " TEXT NOT NULL, "
                 + "UNIQUE (" + Quote.COLUMN_SYMBOL + ") ON CONFLICT REPLACE);";
 
         db.execSQL(builder);

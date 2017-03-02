@@ -34,7 +34,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
     }
 
     String getSymbolAtPosition(int position) {
-
         cursor.moveToPosition(position);
         return cursor.getString(Contract.Quote.POSITION_SYMBOL);
     }
@@ -52,20 +51,20 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
         cursor.moveToPosition(position);
 
-        holder.symbol.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
-        holder.price.setText(StockUtils.getFormattedPriceValue(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
+        holder.symbolTextView.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
+        holder.priceTextView.setText(StockUtils.getFormattedPriceValue(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
 
         float rawAbsoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
-        holder.change.setBackgroundResource(StockUtils.getChangeBackgroundResource(rawAbsoluteChange));
+        holder.changeTextView.setBackgroundResource(StockUtils.getChangeBackgroundResource(rawAbsoluteChange));
 
         String changeValue;
         if (PrefUtils.getDisplayMode(context)
                 .equals(context.getString(R.string.pref_display_mode_absolute_key))) {
-            changeValue = StockUtils.getFormattedPriceValue(rawAbsoluteChange);
+            changeValue = StockUtils.getFormattedAbsoluteChangeValue(rawAbsoluteChange);
         } else {
-            changeValue = StockUtils.getFormattedPriceValue(cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
+            changeValue = StockUtils.getFormattedPercentageChangeValue(cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
         }
-        holder.change.setText(changeValue);
+        holder.changeTextView.setText(changeValue);
     }
 
     @Override
@@ -79,19 +78,14 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
 
     interface StockAdapterOnClickHandler {
-        void onClick(String symbol);
+        void onClick(String symbol, StockViewHolder viewHolder);
     }
 
     class StockViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.symbol)
-        TextView symbol;
-
-        @BindView(R.id.price)
-        TextView price;
-
-        @BindView(R.id.change)
-        TextView change;
+        @BindView(R.id.symbol) TextView symbolTextView;
+        @BindView(R.id.price) TextView priceTextView;
+        @BindView(R.id.change) TextView changeTextView;
 
         StockViewHolder(View itemView) {
             super(itemView);
@@ -104,7 +98,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             int adapterPosition = getAdapterPosition();
             cursor.moveToPosition(adapterPosition);
             int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
-            clickHandler.onClick(cursor.getString(symbolColumn));
+            clickHandler.onClick(cursor.getString(symbolColumn), this);
 
         }
 

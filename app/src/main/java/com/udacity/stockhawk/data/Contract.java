@@ -22,20 +22,31 @@ public final class Contract {
         public static final String COLUMN_PRICE = "price";
         public static final String COLUMN_ABSOLUTE_CHANGE = "absolute_change";
         public static final String COLUMN_PERCENTAGE_CHANGE = "percentage_change";
-        public static final String COLUMN_HISTORY = "history";
+        public static final String COLUMN_YEAR_HISTORY = "year_history";
+        public static final String COLUMN_MONTH_HISTORY = "month_history";
+        public static final String COLUMN_WEEK_HISTORY = "week_history";
+        public static final String COLUMN_DAY_HISTORY = "day_history";
+
         public static final int POSITION_ID = 0;
         public static final int POSITION_SYMBOL = 1;
         public static final int POSITION_PRICE = 2;
         public static final int POSITION_ABSOLUTE_CHANGE = 3;
         public static final int POSITION_PERCENTAGE_CHANGE = 4;
-        public static final int POSITION_HISTORY = 5;
+        public static final int POSITION_YEAR_HISTORY = 5;
+        public static final int POSITION_MONTH_HISTORY = 6;
+        public static final int POSITION_WEEK_HISTORY = 7;
+        public static final int POSITION_DAY_HISTORY = 8;
+
         public static final String[] QUOTE_COLUMNS = {
                 _ID,
                 COLUMN_SYMBOL,
                 COLUMN_PRICE,
                 COLUMN_ABSOLUTE_CHANGE,
                 COLUMN_PERCENTAGE_CHANGE,
-                COLUMN_HISTORY
+                COLUMN_YEAR_HISTORY,
+                COLUMN_MONTH_HISTORY,
+                COLUMN_WEEK_HISTORY,
+                COLUMN_DAY_HISTORY
         };
         public static final String TABLE_NAME = "quotes";
 

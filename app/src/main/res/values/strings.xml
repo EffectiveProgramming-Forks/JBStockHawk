@@ -43,4 +43,34 @@
     <!-- Strings related to Widgets -->
     <string name="title_widget_stocks">@string/app_name</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="stock_price_transition" translatable="false">STOCK_PRICE_TRANSITION</string>
+    <string name="stock_change_transition" translatable="false">STOCK_CHANGE_TRANSITION</string>
+    <string name="marker_text">%s<i> on</i> <xliff:g example="5 Jul 2017" id="date">%s</xliff:g></string><!--Ex: - $567 on 5 Jul 2017-->
+
+    <!--Generic keys-->
+    <string name="FRAGMENT_DATA_TYPE_KEY" translatable="false">FRAGMENT_DATA_TYPE_KEY</string>
+    <string name="DAILY" translatable="false">DAILY</string>
+    <string name="WEEKLY" translatable="false">WEEKLY</string>
+    <string name="MONTHLY" translatable="false">MONTHLY</string>
+    <string name="YEARLY" translatable="false">YEARLY</string>
+
+    <!-- Content description to provide accessibility-->
+    <string name="add_new_stock_cd">Add new stock</string>
+    <string name="detail_activity_cd">Stock details of %s</string>
+    <string name="day_lowest_cd">Today\'s lowest stock value %s</string>
+    <string name="day_highest_cd">Today\'s highest stock value %s</string>
+    <string name="stock_price_cd">Stock price %s</string>
+    <string name="display_mode_cd">Toggle display mode between absolute and percentage values</string>
+    <string name="display_mode_change_cd">Display mode changed to %s</string>
+    <string name="stock_increment_cd">Stock value increased by %s</string>
+    <string name="stock_decrement_cd">Stock value decreased by %s</string>
+    <string name="days_fragment_title">5 DAYS</string>
+    <string name="weeks_fragment_title">10 WEEKS</string>
+    <string name="months_fragment_title">6 MONTHS</string>
+    <string name="year_fragment_title">1 YEAR</string>
+    <string name="try_again">Try again</string>
+    <string name="widget_cd">Stock hawk widget</string>
 </resources>
