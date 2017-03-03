@@ -35,7 +35,7 @@ import icepick.State;
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static int LOADER_ID = 1;
-    private static final int PAGE_LIMIT = 1;
+    private static final int OFFSCREEN_PAGE_LIMIT = 3;
     private Uri stockUri;
     @State(CustomBundler.class) public Map<Integer, String> fragmentTags = new HashMap<>();
     @State public boolean isDataLoaded = false;
@@ -84,7 +84,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         addViewPagerAdapterFragment(adapter, getString(R.string.YEARLY), getString(R.string.year_fragment_title));
 
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(PAGE_LIMIT);
+        viewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
     }
 
     @Override
