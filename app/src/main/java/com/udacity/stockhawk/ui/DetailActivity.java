@@ -37,8 +37,7 @@ import static com.udacity.stockhawk.R.id.price;
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static int LOADER_ID = 1;
-    private static final int PAGE_LIMIT = 2;
-    //@formatter:off
+    private static final int PAGE_LIMIT = 1;
     private Uri stockUri;
     @State(CustomBundler.class) public Map<Integer, String> fragmentTags = new HashMap<>();
     @State public boolean isDataLoaded = false;
@@ -48,7 +47,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @BindView(R.id.exchange) public TextView stockExchangeTextView;
     @BindView(price) public TextView priceTextView;
     @BindView(R.id.change) public TextView changeTextView;
-    //@formatter:on
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +79,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void addViewPager() {
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         addViewPagerAdapterFragment(adapter, getString(R.string.DAILY), getString(R.string.days_fragment_title));
         addViewPagerAdapterFragment(adapter, getString(R.string.WEEKLY), getString(R.string.weeks_fragment_title));
@@ -134,7 +131,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             changeTextView.setText(changeValue);
         }
     }
-
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

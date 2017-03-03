@@ -7,18 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Calendar;
 
-/**
- * Created by jkbreunig on 3/1/17.
- */
-
 public class Parser {
 
-    /**
-     * @param history data retrieved from database
-     *                example : 1480050000000:60.4453453$148005002340:61.442343453$
-     * @return formatted {@link java.util.List} where key
-     * is the date and value is the closing stock value
-     */
     public static android.support.v4.util.Pair<Float, List<Entry>> getFormattedStockHistory(String history) {
         List<Entry> entries = new ArrayList<>();
         List<Float> timeData = new ArrayList<>();

@@ -2,12 +2,12 @@ package com.udacity.stockhawk.widget;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
@@ -16,6 +16,8 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 import com.udacity.stockhawk.ui.DetailActivity;
 import com.udacity.stockhawk.ui.MainActivity;
+
+import timber.log.Timber;
 
 /**
  * Created by jkbreunig on 2/28/17.
@@ -28,7 +30,6 @@ import com.udacity.stockhawk.ui.MainActivity;
 public class StockPriceWidgetProvider extends AppWidgetProvider {
 
     public static final String CLICK_ACTION = "com.breunig.jeff.stock.hawk";
-    public static final String POSITION_EXTRA = "position_extra";
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -36,48 +37,47 @@ public class StockPriceWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_stock_quote);
 
             // Create an Intent to launch MainActivity
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-            PendingIntent clickPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            views.setOnClickPendingIntent(R.id.widget_stock_quote, clickPendingIntent);
+            launchMainActivityIntent(context, views);
 
             setRemoteAdapter(context, views);
 
-            Intent clickActionIntent = new Intent(context, StockPriceWidgetProvider.class);
-            clickActionIntent.setAction(StockPriceWidgetProvider.CLICK_ACTION);
-            clickActionIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, clickActionIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            views.setPendingIntentTemplate(R.id.widget_list, pendingIntent);
+            // Create an Intent to launch DetailActivity
+            launchDetailActivityIntent(context, views);
 
             views.setEmptyView(R.id.widget_list, R.id.widget_empty);
             views.setContentDescription(R.id.widget_list, context.getString(R.string.app_name));
+            views.setInt(R.id.widget_list, "setBackgroundResource", R.color.material_grey_900);
+
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
+    private void launchMainActivityIntent(Context context, RemoteViews views) {
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.widget_stock_quote, pendingIntent);
+    }
+
+    private void launchDetailActivityIntent(Context context, RemoteViews views) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        PendingIntent pendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(intent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.widget_list, pendingIntent);
+    }
+
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
-
+        Timber.d(intent.getAction());
         if (QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction())) {
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass()));
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
-
-        } else if (StockPriceWidgetProvider.CLICK_ACTION.equals(intent.getAction())) {
-            int position = intent.getIntExtra(POSITION_EXTRA, 0);
-
-            Intent i = new Intent(context, DetailActivity.class);
-            i.putExtra(POSITION_EXTRA, position);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
         }
     }
 

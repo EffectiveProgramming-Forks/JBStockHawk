@@ -46,7 +46,6 @@
 
     <string name="stock_price_transition" translatable="false">STOCK_PRICE_TRANSITION</string>
     <string name="stock_change_transition" translatable="false">STOCK_CHANGE_TRANSITION</string>
-    <string name="marker_text">%s<i> on</i> <xliff:g example="5 Jul 2017" id="date">%s</xliff:g></string><!--Ex: - $567 on 5 Jul 2017-->
 
     <!--Generic keys-->
     <string name="FRAGMENT_DATA_TYPE_KEY" translatable="false">FRAGMENT_DATA_TYPE_KEY</string>
@@ -57,7 +56,6 @@
 
     <!-- Content description to provide accessibility-->
     <string name="detail_activity_content_description">Stock details of <xliff:g id="stock symbol">%s</xliff:g></string>
-
 
     <!-- Stock detail view pager tab layout -->
     <string name="days_fragment_title">5 DAYS</string>

@@ -7,6 +7,7 @@ package com.udacity.stockhawk.widget;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.widget.AdapterView;
@@ -97,10 +98,15 @@ public class StockPriceRemoteViewsService extends RemoteViewsService {
                 views.setInt(R.id.change, "setBackgroundResource",
                         StockUtils.getChangeBackgroundResource(rawAbsoluteChange));
 
-                final Intent fillInIntent = new Intent();
-                fillInIntent.putExtra(StockPriceWidgetProvider.POSITION_EXTRA, position);
-                views.setOnClickFillInIntent(R.id.widget_stock_quote, fillInIntent);
+                setStockOnClickIntent(views, symbol);
                 return views;
+            }
+
+            private void setStockOnClickIntent(RemoteViews views, String symbol) {
+                final Intent intent = new Intent();
+                Uri stockUri = Contract.Quote.makeUriForStock(symbol);
+                intent.setData(stockUri);
+                views.setOnClickFillInIntent(R.id.widget_list_item_quote, intent);
             }
 
             @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)

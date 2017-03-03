@@ -76,7 +76,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         return count;
     }
 
-
     interface StockAdapterOnClickHandler {
         void onClick(String symbol, StockViewHolder viewHolder);
     }
@@ -101,7 +100,5 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             clickHandler.onClick(cursor.getString(symbolColumn), this);
 
         }
-
-
     }
 }

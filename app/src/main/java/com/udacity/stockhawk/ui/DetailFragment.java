@@ -38,18 +38,9 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    //@formatter:off
-    @State public int LOADER_ID;
+    @State public int loaderId;
     @State public int dataColumnPosition;
     @State public String fragmentDataType;
     @State public String dateFormat;
@@ -59,7 +50,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @State public boolean isChartDescriptionAnnounced = false;
     @BindView(R.id.chart) public LineChart linechart;
     @BindColor(R.color.white) public int dataColor;
-    //@formatter:on
     private Context mContext;
 
     @Override
@@ -75,22 +65,20 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private void setupInitialState() {
         fragmentDataType = getArguments().getString(getString(R.string.FRAGMENT_DATA_TYPE_KEY));
         if (fragmentDataType.equals(getString(R.string.MONTHLY))) {
-            dataColumnPosition = Contract.Quote.POSITION_MONTH_HISTORY;
-            dateFormat = "MMM";
-            LOADER_ID = 100;
+            setState(Contract.Quote.POSITION_MONTH_HISTORY, "MMM", 1);
         } else if (fragmentDataType.equals(getString(R.string.WEEKLY))) {
-            dataColumnPosition = Contract.Quote.POSITION_WEEK_HISTORY;
-            dateFormat = "dd";
-            LOADER_ID = 200;
+            setState(Contract.Quote.POSITION_WEEK_HISTORY, "dd", 2);
         } else if (fragmentDataType.equals(getString(R.string.DAILY))) {
-            dataColumnPosition = Contract.Quote.POSITION_DAY_HISTORY;
-            dateFormat = "dd";
-            LOADER_ID = 300;
+            setState(Contract.Quote.POSITION_DAY_HISTORY, "dd", 3);
         } else {
-            dataColumnPosition = Contract.Quote.POSITION_YEAR_HISTORY;
-            dateFormat = "MMM";
-            LOADER_ID = 400;
+            setState(Contract.Quote.POSITION_YEAR_HISTORY, "MMM", 4);
         }
+    }
+
+    private void setState(int dataColumnPosition, String dateFormat, int loaderId) {
+        this.dataColumnPosition = dataColumnPosition;
+                this.dateFormat = dateFormat;
+        this.loaderId = loaderId;
     }
 
     @Nullable
@@ -114,23 +102,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(loaderId, null, this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
-    }
-
-    private Entry getSecondToLastData(List<Entry> dataPairs) {
-        if (dataPairs.size() > 1) {
-            return dataPairs.get(dataPairs.size() - 2);
-        } else if (dataPairs.size() > 0) {
-            return dataPairs.get(dataPairs.size() - 1);
-        } else {
-            return null;
-        }
     }
 
     @Override
@@ -159,18 +137,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void setUpLineChart() {
         Pair<Float, List<Entry>> result = Parser.getFormattedStockHistory(historyData);
-        List<Entry> dataPairs = result.second;
         Float referenceTime = result.first;
-        LineDataSet dataSet = new LineDataSet(dataPairs, "");
-        dataSet.setColor(dataColor);
-        dataSet.setLineWidth(3f);
-        dataSet.setDrawHighlightIndicators(false);
-        dataSet.setCircleColor(dataColor);
-        dataSet.setCircleRadius(4f);
-        dataSet.setHighLightColor(dataColor);
-        dataSet.setDrawValues(false);
 
-        LineData lineData = new LineData(dataSet);
+        LineData lineData = new LineData(setupLineDataSet(result.second));
         linechart.setData(lineData);
 
         XAxis xAxis = linechart.getXAxis();
@@ -188,17 +157,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Legend legend = linechart.getLegend();
         legend.setEnabled(false);
 
-        //disable all interactions with the graph
-        linechart.setDragEnabled(false);
-        linechart.setScaleEnabled(false);
-        linechart.setDragDecelerationEnabled(false);
-        linechart.setPinchZoom(false);
-        linechart.setDoubleTapToZoomEnabled(false);
-        Description description = new Description();
-        description.setText(" ");
-        linechart.setDescription(description);
-        linechart.setExtraOffsets(10, 0, 0, 10);
-        linechart.animateX(1000, Easing.EasingOption.Linear);
+        setLinechartValues();
+    }
+
+    private LineDataSet setupLineDataSet(List<Entry> dataPairs) {
+        LineDataSet dataSet = new LineDataSet(dataPairs, "");
+        dataSet.setColor(dataColor);
+        dataSet.setLineWidth(3f);
+        dataSet.setDrawHighlightIndicators(false);
+        dataSet.setCircleColor(dataColor);
+        dataSet.setCircleRadius(4f);
+        dataSet.setHighLightColor(dataColor);
+        dataSet.setDrawValues(false);
+        return dataSet;
     }
 
     private void setupAxisBase(AxisBase axisBase) {
@@ -207,6 +178,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         axisBase.setAxisLineWidth(1.5f);
         axisBase.setTextColor(dataColor);
         axisBase.setTextSize(14f);
+    }
+
+    private void setLinechartValues() {
+        linechart.setDragEnabled(false);
+        linechart.setScaleEnabled(false);
+        linechart.setDragDecelerationEnabled(false);
+        linechart.setPinchZoom(false);
+        linechart.setDoubleTapToZoomEnabled(false);
+        linechart.setExtraOffsets(10, 0, 0, 10);
+        linechart.animateX(1000, Easing.EasingOption.Linear);
+        Description description = new Description();
+        description.setText(" ");
+        linechart.setDescription(description);
     }
 
     @Override

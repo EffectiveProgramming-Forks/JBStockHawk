@@ -7,26 +7,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by jkbreunig on 3/2/17.
- */
-
 public class XAxisDateValueFormatter implements IAxisValueFormatter {
-
-    private final SimpleDateFormat dateFormat;
-    private final Date date;
-    private final Float referenceTime;
+    private final Date mDate;
+    private final SimpleDateFormat mDateFormat;
+    private final Float mReferenceTime;
 
     public XAxisDateValueFormatter(String dateFormat, Float referenceTime) {
-        //this.dateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
-        this.dateFormat = new SimpleDateFormat("", Locale.getDefault());
-        this.date = new Date();
-        this.referenceTime = referenceTime;
+        mDateFormat = new SimpleDateFormat("", Locale.getDefault());
+        mDate = new Date();
+        mReferenceTime = referenceTime;
     }
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        date.setTime((long) (value + referenceTime));
-        return dateFormat.format(date);
+        mDate.setTime((long) (value + mReferenceTime));
+        return mDateFormat.format(mDate);
     }
 }

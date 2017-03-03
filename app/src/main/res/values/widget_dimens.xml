@@ -2,7 +2,7 @@
 
 <resources>
     <!-- Stock Price Widget -->
-    <dimen name="widget_stock_price_default_width">180dp</dimen>
+    <dimen name="widget_stock_price_default_width">250dp</dimen>
     <dimen name="widget_stock_price_default_resize_width">180dp</dimen>
     <dimen name="widget_stock_price_default_height">180dp</dimen>
     <dimen name="widget_stock_price_default_resize_height">@dimen/widget_stock_price_default_height</dimen>
