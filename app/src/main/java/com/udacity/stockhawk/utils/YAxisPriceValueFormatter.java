@@ -8,15 +8,15 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class YAxisPriceValueFormatter implements IAxisValueFormatter {
-    private final DecimalFormat mDollarFormat;
+    private final DecimalFormat mFormat;
 
     public YAxisPriceValueFormatter() {
-        mDollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
-        mDollarFormat.setMaximumFractionDigits(0);
+        mFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
+        mFormat.setMaximumFractionDigits(0);
     }
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        return String.format(mDollarFormat.format(value), value);
+        return String.format(mFormat.format(value), value);
     }
 }

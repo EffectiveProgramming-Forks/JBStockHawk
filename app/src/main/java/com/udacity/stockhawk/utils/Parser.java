@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 public class Parser {
 
-    public static android.support.v4.util.Pair<Float, List<Entry>> getFormattedStockHistory(String history) {
+    public static android.support.v4.util.Pair<Float, List<Entry>> getStockHistory(String history) {
         List<Entry> entries = new ArrayList<>();
         List<Float> timeData = new ArrayList<>();
         List<Float> stockPrice = new ArrayList<>();

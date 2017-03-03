@@ -58,7 +58,7 @@
     <string name="detail_activity_content_description">Stock details of <xliff:g id="stock symbol">%s</xliff:g></string>
 
     <!-- Stock detail view pager tab layout -->
-    <string name="days_fragment_title">5 DAYS</string>
+    <string name="days_fragment_title">10 DAYS</string>
     <string name="weeks_fragment_title">10 WEEKS</string>
     <string name="months_fragment_title">6 MONTHS</string>
     <string name="year_fragment_title">1 YEAR</string>

@@ -27,12 +27,10 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.utils.Parser;
-import com.udacity.stockhawk.utils.XAxisDateValueFormatter;
 import com.udacity.stockhawk.utils.YAxisPriceValueFormatter;
 
 import java.util.List;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
@@ -49,7 +47,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @State public String fragmentTitle;
     @State public boolean isChartDescriptionAnnounced = false;
     @BindView(R.id.chart) public LineChart linechart;
-    @BindColor(R.color.white) public int dataColor;
     private Context mContext;
 
     @Override
@@ -136,15 +133,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void setUpLineChart() {
-        Pair<Float, List<Entry>> result = Parser.getFormattedStockHistory(historyData);
-        Float referenceTime = result.first;
+        Pair<Float, List<Entry>> result = Parser.getStockHistory(historyData);
 
         LineData lineData = new LineData(setupLineDataSet(result.second));
         linechart.setData(lineData);
 
         XAxis xAxis = linechart.getXAxis();
-        xAxis.setValueFormatter(new XAxisDateValueFormatter(dateFormat, referenceTime));
-        setupAxisBase(xAxis);
+        setupAxisBase(xAxis, false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         YAxis yAxisRight = linechart.getAxisRight();
@@ -152,7 +147,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         YAxis yAxis = linechart.getAxisLeft();
         yAxis.setValueFormatter(new YAxisPriceValueFormatter());
-        setupAxisBase(yAxis);
+        setupAxisBase(yAxis, true);
 
         Legend legend = linechart.getLegend();
         legend.setEnabled(false);
@@ -161,32 +156,37 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private LineDataSet setupLineDataSet(List<Entry> dataPairs) {
+        int color = getResources().getColor(R.color.colorAccent);
         LineDataSet dataSet = new LineDataSet(dataPairs, "");
-        dataSet.setColor(dataColor);
+        dataSet.setColor(color);
         dataSet.setLineWidth(3f);
         dataSet.setDrawHighlightIndicators(false);
-        dataSet.setCircleColor(dataColor);
+        dataSet.setCircleColor(color);
         dataSet.setCircleRadius(4f);
-        dataSet.setHighLightColor(dataColor);
         dataSet.setDrawValues(false);
         return dataSet;
     }
 
-    private void setupAxisBase(AxisBase axisBase) {
+    private void setupAxisBase(AxisBase axisBase, boolean showText) {
+        int color = getResources().getColor(R.color.colorAccent);
         axisBase.setDrawGridLines(false);
-        axisBase.setAxisLineColor(dataColor);
-        axisBase.setAxisLineWidth(1.5f);
-        axisBase.setTextColor(dataColor);
-        axisBase.setTextSize(14f);
+        axisBase.setAxisLineWidth(2f);
+        axisBase.setAxisLineColor(color);
+        if (showText) {
+            axisBase.setTextColor(color);
+            axisBase.setTextSize(14f);
+        } else {
+            axisBase.setDrawLabels(false);
+        }
     }
 
     private void setLinechartValues() {
         linechart.setDragEnabled(false);
-        linechart.setScaleEnabled(false);
         linechart.setDragDecelerationEnabled(false);
         linechart.setPinchZoom(false);
+        linechart.setScaleEnabled(false);
         linechart.setDoubleTapToZoomEnabled(false);
-        linechart.setExtraOffsets(10, 0, 0, 10);
+        linechart.setExtraOffsets(10, 0, 0, 0);
         linechart.animateX(1000, Easing.EasingOption.Linear);
         Description description = new Description();
         description.setText(" ");

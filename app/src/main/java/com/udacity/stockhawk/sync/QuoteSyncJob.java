@@ -122,7 +122,7 @@ public final class QuoteSyncJob {
         putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.MONTH, -11, Interval.MONTHLY, Contract.Quote.COLUMN_YEAR_HISTORY);
         putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.MONTH, -5, Interval.MONTHLY, Contract.Quote.COLUMN_MONTH_HISTORY);
         putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.DAY_OF_YEAR, -63, Interval.WEEKLY,Contract.Quote.COLUMN_WEEK_HISTORY);
-        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.DAY_OF_YEAR, -4, Interval.DAILY,Contract.Quote.COLUMN_DAY_HISTORY);
+        putHistorialQuotesForUnitOfTime(contentValues, stock, Calendar.DAY_OF_YEAR, -9, Interval.DAILY,Contract.Quote.COLUMN_DAY_HISTORY);
     }
 
     private static void putHistorialQuotesForUnitOfTime(ContentValues contentValues, Stock stock, int unit, int time, Interval interval, String column) {

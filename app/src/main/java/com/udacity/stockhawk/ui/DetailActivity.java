@@ -32,8 +32,6 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-import static com.udacity.stockhawk.R.id.price;
-
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static int LOADER_ID = 1;
@@ -42,11 +40,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @State(CustomBundler.class) public Map<Integer, String> fragmentTags = new HashMap<>();
     @State public boolean isDataLoaded = false;
     @BindView(R.id.viewpager) public ViewPager viewPager;
-    @BindView(R.id.tabs) public TabLayout tabLayout;
-    @BindView(R.id.symbol) public TextView symbolTextView;
-    @BindView(R.id.exchange) public TextView stockExchangeTextView;
-    @BindView(price) public TextView priceTextView;
-    @BindView(R.id.change) public TextView changeTextView;
+    @BindView(R.id.tabLayout) public TabLayout tabLayout;
+    @BindView(R.id.priceTextView) public TextView priceTextView;
+    @BindView(R.id.changeTextView) public TextView changeTextView;
+    @BindView(R.id.symbolTextView) public TextView symbolTextView;
+    @BindView(R.id.exchangeTextView) public TextView stockExchangeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

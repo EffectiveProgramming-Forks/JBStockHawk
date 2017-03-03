@@ -8,7 +8,7 @@
     android:orientation="horizontal">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/appbarLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
@@ -31,23 +31,23 @@
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
-        android:id="@+id/chart_content"
+        android:id="@+id/chartLayout"
+        android:layout_weight="6"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
+        android:layout_height="match_parent" >
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             app:tabGravity="fill"
+            android:background="@color/colorPrimary"
             app:tabMode="fixed"/>
 
         <include
-            layout="@layout/content_detail"
+            layout="@layout/view_pager"
+            android:layout_below="@id/tabLayout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tabs"/>
+            android:layout_height="match_parent" />
     </RelativeLayout>
 </LinearLayout>
