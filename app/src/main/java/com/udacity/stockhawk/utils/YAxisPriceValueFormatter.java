@@ -12,7 +12,7 @@ public class YAxisPriceValueFormatter implements IAxisValueFormatter {
 
     public YAxisPriceValueFormatter() {
         mFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.getDefault());
-        mFormat.setMaximumFractionDigits(0);
+        mFormat.setMaximumFractionDigits(2);
     }
 
     @Override

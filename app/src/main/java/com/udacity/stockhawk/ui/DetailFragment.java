@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,9 +132,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void setUpLineChart() {
-        Pair<Float, List<Entry>> result = Parser.getStockHistory(historyData);
+        List<Entry> result = Parser.getStockHistory(historyData);
 
-        LineData lineData = new LineData(setupLineDataSet(result.second));
+        LineData lineData = new LineData(setupLineDataSet(result));
         linechart.setData(lineData);
 
         XAxis xAxis = linechart.getXAxis();

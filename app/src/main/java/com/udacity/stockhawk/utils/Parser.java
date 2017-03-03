@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 public class Parser {
 
-    public static android.support.v4.util.Pair<Float, List<Entry>> getStockHistory(String history) {
+    public static List<Entry> getStockHistory(String history) {
         List<Entry> entries = new ArrayList<>();
         List<Float> timeData = new ArrayList<>();
         List<Float> stockPrice = new ArrayList<>();
@@ -28,6 +28,6 @@ public class Parser {
         for (int i = 0; i < timeData.size(); i++) {
             entries.add(new Entry(timeData.get(i) - referenceTime, stockPrice.get(i)));
         }
-        return new android.support.v4.util.Pair<>(referenceTime, entries);
+        return entries;
     }
 }
