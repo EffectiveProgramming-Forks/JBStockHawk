@@ -163,10 +163,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Float referenceTime = result.first;
         LineDataSet dataSet = new LineDataSet(dataPairs, "");
         dataSet.setColor(dataColor);
-        dataSet.setLineWidth(2f);
+        dataSet.setLineWidth(3f);
         dataSet.setDrawHighlightIndicators(false);
         dataSet.setCircleColor(dataColor);
-        dataSet.setCircleRadius(3f);
+        dataSet.setCircleRadius(4f);
         dataSet.setHighLightColor(dataColor);
         dataSet.setDrawValues(false);
 

@@ -39,12 +39,10 @@
     <!-- Refresh content error messages  -->
     <string name="toast_stock_added_no_connectivity">Symbol <xliff:g id="stock symbol">%s</xliff:g> added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
+    <string name="toast_invalid_staock"><xliff:g id="stock symbol">%s</xliff:g> not added. Invalid symbol.</string>
 
     <!-- Strings related to Widgets -->
     <string name="title_widget_stocks">@string/app_name</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="stock_price_transition" translatable="false">STOCK_PRICE_TRANSITION</string>
     <string name="stock_change_transition" translatable="false">STOCK_CHANGE_TRANSITION</string>
@@ -58,15 +56,7 @@
     <string name="YEARLY" translatable="false">YEARLY</string>
 
     <!-- Content description to provide accessibility-->
-    <string name="add_new_stock_cd">Add new stock</string>
-    <string name="detail_activity_cd">Stock details of %s</string>
-    <string name="day_lowest_cd">Today\'s lowest stock value %s</string>
-    <string name="day_highest_cd">Today\'s highest stock value %s</string>
-    <string name="stock_price_cd">Stock price %s</string>
-    <string name="display_mode_cd">Toggle display mode between absolute and percentage values</string>
-    <string name="display_mode_change_cd">Display mode changed to %s</string>
-    <string name="try_again">Try again</string>
-    <string name="widget_cd">Stock hawk widget</string>
+    <string name="detail_activity_content_description">Stock details of <xliff:g id="stock symbol">%s</xliff:g></string>
 
 
     <!-- Stock detail view pager tab layout -->

@@ -116,7 +116,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             symbolTextView.setText(symbol);
 
             getWindow().getDecorView().setContentDescription(
-                    String.format(getString(R.string.detail_activity_cd), symbol));
+                    String.format(getString(R.string.detail_activity_content_description), symbol));
 
             String price = StockUtils.getFormattedPriceValue(data.getFloat(Contract.Quote.POSITION_PRICE));
             priceTextView.setText(price);
